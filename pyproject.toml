@@ -1,0 +1,18 @@
+[project]
+name = "zcode-cli-usage"
+version = "0.1.0"
+description = "Z.ai Coding Plan quota monitor"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+zcode-cli-usage = "zcode_cli_usage:main"
+
+[project.urls]
+Homepage = "https://github.com/wakamex/zcode-cli-usage"
+Source = "https://github.com/wakamex/zcode-cli-usage"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
