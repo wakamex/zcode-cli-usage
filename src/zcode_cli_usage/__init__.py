@@ -72,7 +72,17 @@ def number(value):
     return value
 
 
+def no_plan(payload):
+    # An account without a subscription gets a failure whose message names the missing coding plan,
+    # for example "当前用户不存在coding plan" ("the current user has no coding plan").
+    return (isinstance(payload, dict) and payload.get("success") is False
+            and "coding plan" in str(payload.get("msg") or "").lower())
+
+
 def normalize(payload):
+    if no_plan(payload):
+        return {"plan": None, "status": "no_plan", "source": "api",
+                "updated_at": datetime.now(timezone.utc).isoformat(), "limits": []}
     if not isinstance(payload, dict) or payload.get("code") != 200 or payload.get("success") is not True:
         raise ValueError("Usage API reported an unsuccessful response")
     data = payload.get("data")
@@ -136,6 +146,9 @@ def label(item):
 
 
 def display(data, compact=False):
+    if data.get("status") == "no_plan":
+        print("No active Coding Plan")
+        return
     parts = []
     for item in data["limits"]:
         suffix = " credits" if item["type"] == "CREDIT_LIMIT" else f" {item['type']}"

@@ -53,6 +53,11 @@ class UsageTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 usage.normalize(response)
 
+    def test_account_without_plan(self):
+        data = usage.normalize({"code": 500, "success": False, "msg": "当前用户不存在coding plan", "data": None})
+        self.assertEqual((data["status"], data["plan"], data["limits"]), ("no_plan", None, []))
+        self.assertIn("updated_at", data)
+
     def test_unknown_quota_preserved(self):
         response = copy.deepcopy(LIVE_RESPONSE)
         response["data"]["limits"][0].update(type="FUTURE_LIMIT", unit=42)

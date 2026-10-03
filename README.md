@@ -75,6 +75,8 @@ Quota data comes from `GET https://api.z.ai/api/monitor/usage/quota/limit`, auth
 
 The normalized JSON maps `currentValue` to `used`, `usage` to `limit`, `percentage` to `pct`, and `nextResetTime` from Unix milliseconds to a UTC `resets_at` string. It retains each quota's `type`, `unit`, `number`, and `remaining`. The current API uses unit `3` for hours and `6` for weeks.
 
+An account without an active Coding Plan gets an unsuccessful response whose message names the missing coding plan. The tool caches that as `"status": "no_plan"` with an empty `limits` list, so consumers can hide the plan instead of showing the last subscribed quotas.
+
 ## Development
 
 ```sh
